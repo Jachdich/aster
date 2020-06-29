@@ -1,0 +1,368 @@
+from PyQt5 import QtWidgets
+from sys import path
+path.append("..")
+from lib import gui
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.initGUI()
+
+    def initGUI(self):
+        self.main = QtWidgets.QWidget(self)
+        
+        self.layout = QtWidgets.QGridLayout(self.main)
+        self.messageArea = gui.MessageArea()
+        self.layout.addWidget(self.messageArea, 0, 0)
+        self.main.setLayout(self.layout)
+        self.setCentralWidget(self.main)
+        self.show()
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    mw = MainWindow()
+    app.exec_()
+
+        
+
+from sys import path
+path.append("..")
+from lib import net, keys, user, encryption
+
+s = net.ClientSocket()
+
+def onUserMessage(message, targetUUID):
+    s.setUser(users.server)
+    s.sendEncrypted("put")
+    s.setUser(users.getUserByUUID(targetUUID))
+    s.sendEncrypted(
+
+#encrypted = encryption.encrypt("testasd", keys.public)
+#print(encrypted)
+#original  = encryption.decrypt(encrypted, keys.private)
+#print(original)
+
+PUBLIC_KEY  = "/home/sage/.config/SMP/public.key"
+PRIVATE_KEY = "/home/sage/.config/SMP/private.key"
+CONFIG_DIR  = "/home/sage/.config/SMP/"
+PORT = 12413
+ADDR = "127.0.0.1"
+KEY_LEN = 256 * 8
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
+import base64
+
+def generate_keys(modulus_length):
+   private_key = rsa.generate_private_key(
+       public_exponent=65537,
+       key_size=modulus_length,
+       backend=default_backend()
+   )
+   public_key = private_key.public_key()
+   return private_key, public_key
+
+def encrypt(message, publickey):
+   encrypted = publickey.encrypt(
+      message.encode("utf-8"),
+      padding.OAEP(
+         mgf=padding.MGF1(algorithm=hashes.SHA256()),
+         algorithm=hashes.SHA256(),
+         label=None
+      )
+   )
+   return base64.urlsafe_b64encode(encrypted)
+
+def decrypt(msg, privatekey):
+   original = privatekey.decrypt(
+      base64.urlsafe_b64decode(msg),
+      padding.OAEP(
+         mgf=padding.MGF1(algorithm=hashes.SHA256()),
+         algorithm=hashes.SHA256(),
+         label=None
+      )
+   )
+   return original
+
+import sys, datetime
+
+class termcolor:
+    def colored(message, color):
+        return message
+
+def info(msg):
+    print("[{}][ INFO ] ".format(datetime.datetime.now()) + msg)
+
+def warn(msg):
+    print(termcolor.colored(
+        "[{}][ WARN ] ".format(datetime.datetime.now())
+        + msg, "yellow"))
+
+def error(msg):
+    print(termcolor.colored(
+        "[{}][ ERR  ] ".format(datetime.datetime.now())
+        + msg, "red"), file=sys.stderr)
+
+def fatal(msg, error=True):
+    print(termcolor.colored(
+        "[{}][ FATAL] ".format(datetime.datetime.now())
+        + msg, "red"), file=sys.stderr)
+    if error:
+        raise Exception(msg)
+
+#info("asd")
+#warn("asd ffff")
+#error("asd is an error")
+#fatal("asd is fatal!!!")
+
+from PyQt5 import QtWidgets
+
+class MessageArea(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.messages = []
+        self.initGUI()
+
+    def initGUI(self):
+        self.layout = QtWidgets.QGridLayout(self)
+        self.setLayout(self.layout)
+
+    def addMessage(self, message):
+        self.messages.append(message)
+        self.layout.addWidget(message, len(self.messages) - 1, 0)
+        
+
+class Message(QtWidgets.QWidget):
+    def __init__(self, text, parent=None):
+        super().__init__(parent)
+        self.text = text
+        self.initGUI()
+
+    def initGUI(self):
+        self.layout = QtWidgets.QGridLayout(self)
+        self.layout.addWidget(QtWidgets.QLabel(self.text))
+        self.setLayout(self.layout)
+
+from sys import path
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+path.append("..")
+from lib import config, errors, encryption
+import os, base64
+
+
+def generateNewUUID():
+    rand = base64.urlsafe_b64encode(os.urandom(512))
+    print(rand)
+    return rand
+
+
+if not os.path.isdir(config.CONFIG_DIR):
+    errors.info("Creating config dir")
+    os.makedirs(config.CONFIG_DIR)
+    
+if not os.path.isfile(config.PUBLIC_KEY) or not os.path.isfile(config.PRIVATE_KEY):
+    errors.info("Creating keys")
+    private, public = encryption.generate_keys(config.KEY_LEN)
+
+    pem = private.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+
+    with open(config.PRIVATE_KEY, "wb") as f:
+        f.write(pem)
+
+    pem = public.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+
+    with open(config.PUBLIC_KEY, "wb") as f:
+        f.write(pem)
+                
+with open(config.PRIVATE_KEY, "rb") as key_file:
+    private = serialization.load_pem_private_key(
+        key_file.read(),
+        password=None,
+        backend=default_backend()
+    )
+with open(config.PUBLIC_KEY, "rb") as key_file:
+    public = serialization.load_pem_public_key(
+        key_file.read(),
+        backend=default_backend()
+    )
+
+if not os.path.isfile("/home/sage/temp-uuid.txt"):
+    with open("/home/sage/temp-uuid.txt", "wb") as f:
+        f.write(generateNewUUID())
+
+with open("/home/sage/temp-uuid.txt", "rb") as f:
+    TEMP_UUID = f.read()
+
+
+class ClientListener(threading.Thread):
+    def __init__(self):
+        super().__init__(target=self.mainloop)
+        self.start()
+
+    def mainloop(self):
+        
+
+import socket
+from sys import path
+path.append("..")
+from lib import encryption, keys, config
+
+class ClientSocket(socket.socket):
+    def __init__(self):
+        super().__init__(socket.AF_INET, socket.SOCK_STREAM)
+        self.connect((config.ADDR, config.PORT))
+        self.user = None
+
+    def setUser(self, user):
+        self.user = user
+
+    def sendEncrypted(self, plain):
+        if self.user is None:
+            errors.error("User is not set whilst trying to send data")
+            
+        encrypted = encryption.encrypt(plain, self.user.key)
+        length = str(len(encrypted))
+        print(encrypted)
+        self.send((length + " " * (1024 - len(length))).encode("utf-8"))
+        self.send(encrypted)
+
+    def recvEncrypted(self):
+        length = int(self.recv(1024).strip(" "))
+        out = ""
+        while len(out) < length:
+            out += self.recv(1024)
+
+        plain = encryption.decrypt(out, keys.private)
+        return plain
+
+class User:
+    def __init__(self, publickey, uuid):
+        self.key = publickey
+        self.uuid = uuid
+        
+
+from sys import path
+path.append("..")
+from lib import keys, user
+
+server = user.User(keys.public, None)
+
+def getUserByUUID(uuid):
+    return user.User(keys.public, keys.TEMP_UUID)
+
+
+import os
+ending = []
+def endswith(s, end):
+    for i in end:
+        if s.endswith(i):
+            return True
+    return False
+
+def get_subdirs(a_dir):
+    out = []
+    for name in os.listdir(a_dir):
+        #print(os.path.join(a_dir, name))
+        if os.path.isdir(os.path.join(a_dir, name)):
+            if not name in ("eclipse-workspace", "git", "x86_64-w64-mingw32", "bin", "tcl", "build", "dist"):
+                out.extend(get_subdirs(os.path.join(a_dir, name)))
+        else:
+            if os.path.exists(os.path.join(a_dir, ".ignore")):
+                print(a_dir)
+                continue
+            
+            if endswith(name, [".py", ]):
+                out.append(os.path.join(a_dir, name))
+            else:
+                if not name.split(".")[-1] in ending and "." in name:
+                    ending.append(name.split(".")[-1])
+    return out
+
+line_count = 0
+whitespace = 0
+comment    = 0
+total = ""
+for i in get_subdirs("."):
+    print(i)
+    with open(i, "r") as f:
+        for line in f.read().split("\n"):
+            total += line + "\n"
+            if len(line.strip("\t ")) > 0 and not line.strip("\t ").startswith("//"):
+                line_count += 1
+            elif line.strip("\t ").startswith("//"):
+                comment += 1
+            else:
+                whitespace += 1
+
+#for i in ending:
+#    print(i)
+print(line_count)
+print(whitespace)
+print(comment)
+print(line_count + comment + whitespace)
+
+with open("total.txt", "w") as f:
+    f.write(total)
+
+from sys import path
+import threading, socket
+path.append("..")
+from lib import net, encryption, errors, keys
+from lib.config import PORT
+def clean():
+    try:
+        conn.close()
+    except:
+        pass
+    s.close()
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(("0.0.0.0", PORT))
+s.listen(20)
+
+class ServerHandler(threading.Thread):
+    def __init__(self, conn):
+        super().__init__(target=self.run)
+        self.conn = conn
+        self.start()
+
+    def recvEncrypted(self):
+        length = int(self.conn.recv(1024).decode("utf-8").strip(" "))
+        out = ""
+        while len(out) < length:
+            out += self.conn.recv(1024).decode("utf-8")
+        return out
+
+    def run(self):
+        request = encryption.decrypt(self.recvEncrypted(), keys.private)
+        if request == "put":
+            encrypted_data = self.recvEncrypted()
+
+threads = []
+
+try:
+    while True:
+        conn, addr = s.accept()
+        errors.info("Connected by {}".format(addr))
+        threads.append(ServerHandler(conn))
+
+except Exception as e:
+    errors.fatal(str(e), False)
+    clean()
+
+except KeyboardInterrupt:
+    errors.fatal("Keyboard interrupt!", False)
+    clean()
+finally:
+    clean()
+

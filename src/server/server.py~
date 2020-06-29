@@ -1,0 +1,51 @@
+from sys import path
+import threading, socket
+path.append("..")
+from lib import net, encryption, errors, keys
+from lib.config import PORT
+def clean():
+    try:
+        conn.close()
+    except:
+        pass
+    s.close()
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(("0.0.0.0", PORT))
+s.listen(20)
+
+class ServerHandler(threading.Thread):
+    def __init__(self, conn):
+        super().__init__(target=self.run)
+        self.conn = conn
+        self.start()
+
+    def recvEncrypted(self):
+        length = int(self.conn.recv(1024).decode("utf-8").strip(" "))
+        out = ""
+        while len(out) < length:
+            out += self.conn.recv(1024).decode("utf-8")
+        return out
+    
+    def run(self):
+        request = encryption.decrypt(self.recvEncrypted(), keys.private)
+        if request == "put":
+            encrypted_data = self.recvEncrypted()
+
+threads = []
+
+try:
+    while True:
+        conn, addr = s.accept()
+        errors.info("Connected by {}".format(addr))
+        threads.append(ServerHandler(conn))
+
+except Exception as e:
+    errors.fatal(str(e), False)
+    clean()
+    
+except KeyboardInterrupt:
+    errors.fatal("Keyboard interrupt!", False)
+    clean()
+finally:
+    clean()
