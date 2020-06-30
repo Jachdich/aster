@@ -16,6 +16,11 @@
 #server: sure
 #and again and again
 
+
+Style of messages being displayed?
+Own messages: same or opposite side?
+
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 from sys import path
 path.append("../..")
@@ -34,11 +39,11 @@ class MessageWindow(QtWidgets.QWidget):
         self.listener = listener.ClientListener()
         self.listener.received.connect(self.messageRecvd)
 
-        self.server = listener.ClientServerInterface()
+        self.server = listener.ClientServerInterface("no idea", "wtf")
 
     def messageRecvd(self, message):
         self.addMessage(message)
-        self.server.markAsRead(message)]
+        self.server.markAsRead(message)
         
     def constructHTML(self, messages):
         return " <br/>\n".join(messages)

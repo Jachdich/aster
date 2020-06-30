@@ -1,0 +1,165 @@
+{
+    "words": {
+        "braces": [
+            "\\{",
+            "\\}",
+            "\\(",
+            "\\)",
+            "\\[",
+            "\\]"
+        ],
+        "operators": [
+            "=",
+            "==",
+            "!=",
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "\\+",
+            "-",
+            "\\*",
+            "/",
+            "//",
+            "\\%",
+            "\\*\\*",
+            "\\+=",
+            "-=",
+            "\\*=",
+            "/=",
+            "\\%=",
+            "\\^",
+            "\\|",
+            "\\&",
+            "\\~",
+            ">>",
+            "<<"
+        ],
+        "builtins": [
+            "format",
+            "bytes",
+            "len",
+            "open",
+            "Exception",
+            "IndexError",
+            "ValueError",
+            "TypeError",
+            "print",
+            "str",
+            "int",
+            "float",
+            "list",
+            "dict",
+            "map",
+            "enumerate",
+            "super",
+            "isinstance",
+            "exit",
+            "max",
+            "min"
+        ],
+        "keywords": [
+            "and",
+            "assert",
+            "break",
+            "class",
+            "continue",
+            "def",
+            "del",
+            "elif",
+            "else",
+            "except",
+            "exec",
+            "finally",
+            "for",
+            "from",
+            "global",
+            "if",
+            "import",
+            "in",
+            "is",
+            "lambda",
+            "not",
+            "or",
+            "pass",
+            "raise",
+            "return",
+            "try",
+            "while",
+            "yield",
+            "None",
+            "True",
+            "False",
+            "as",
+            "with"
+        ]
+    },
+    "colours": {
+        "builtin": [
+            "#ff00aa",
+            "{bg}",
+            "normal"
+        ],
+        "comment": [
+            "#107f2f",
+            "{bg}",
+            "italic"
+        ],
+        "defclass": [
+            "#5e5eff",
+            "{bg}",
+            "default"
+        ],
+        "numbers": [
+            "#dddddd",
+            "{bg}",
+            "default"
+        ],
+        "dark": "#2a2a2a",
+        "keyword": [
+            "#ff8000",
+            "{bg}",
+            "default"
+        ],
+        "operator": [
+            "red",
+            "{bg}",
+            "default"
+        ],
+        "self": [
+            "#ffff00ff",
+            "{bg}",
+            "normal"
+        ],
+        "string2": [
+            "#02ff02",
+            "{bg}",
+            "default"
+        ],
+        "brace": [
+            "darkGray",
+            "{bg}",
+            "default"
+        ],
+        "fg": "#cccccc",
+        "bg": "#333333",
+        "light": "#555555",
+        "string": [
+            "#02ff02",
+            "{bg}",
+            "default"
+        ]
+    },
+    "regex": {
+         "numbers":  "\\b[+-]?[0-9]+[lL]?\\b|\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b|\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b",
+         "defclass": "\\bdef\\b\\s*(\\w+)|\\bclass\\b\\s*(\\w+)",
+         "self":     "\\bself\\b",
+         "string":   "\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"|'[^'\\\\]*(\\\\.[^'\\\\]*)*'",
+         "comment":  "#[^\\n]*",
+         "keyword":  "\\b{keyword}\\b",
+         "builtin":  "\\b{builtin}\\b",
+         "operator": "{operator}",
+         "brace":    "{brace}",
+         "string2":  "Regex isn't used u dummy"
+    }
+}

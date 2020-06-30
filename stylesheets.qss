@@ -1,0 +1,101 @@
+App {{
+    background-color: {bg};
+    color: {fg};
+}}
+
+QTreeView {{
+    background-color: {bg};
+    color: {fg};
+}}
+
+QScrollBar:vertical {{
+    border: 2px solid {dark};
+    border-right: 1px solid {dark};
+    background: {bg};
+    width: 15px;
+    margin: 0px 0px 0px 0px;
+}}
+
+QScrollBar::handle:vertical {{
+    background: {light};
+    min-height: 20px;
+    border-radius: 5px;
+}}
+
+QScrollBar::add-line:vertical {{
+    border: 0px solid {dark};
+    background: {bg};
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}}
+
+QScrollBar::sub-line:vertical {{
+    border: 0px solid {dark};
+    background: {bg};
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}}
+
+QScrollBar:horizontal {{
+    border: 2px solid {dark};
+    border-bottom: 1px solid {dark};
+    background: {bg};
+    height: 15px;
+    margin: 0px 0px 0px 0px;
+}}
+
+QScrollBar::handle:horizontal {{
+    background: {light};
+    min-width: 20px;
+    border-radius: 5px;
+}}
+
+QScrollBar::add-line:horizontal {{
+    border: 0px solid black;
+    background: #000000;
+    width: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}}
+
+QScrollBar::sub-line:horizontal {{
+    border: 0px solid black;
+    background: #000000;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}}
+
+QFrame {{
+    background-color: {dark};
+    color: {fg};
+}}
+
+QMenuBar {{
+    background-color: {bg};
+    color: {fg};
+}}
+
+QTabWidget {{
+    background-color: {bg};
+    color: {fg};
+}}
+
+QTabBar {{
+    color: {fg};
+    background-color: {bg};
+}}
+
+QPlainTextEdit {{
+    background-color: {bg};
+    color: {fg};
+    font-family: Courier;
+/*    font-size: 18px;*/
+}}
+
+QLabel {{
+    padding: -10px;
+}}
+
