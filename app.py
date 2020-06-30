@@ -30,7 +30,7 @@ class Message(QtWidgets.QWidget):
         self.text = QtWidgets.QLabel("This is a test m9\nSecond line\nThird line m10 this is cool")
         
         self.layout.addWidget(self.pfp, 0, 0, 1, 1)#, alignment=QtCore.Qt.AlignLeft)
-        self.layout.addWidget(self.frame, 0, 1, 2, 2)
+        self.layout.addWidget(self.frame, 0, 1, 2, 1)
         self.fLayout.addWidget(self.uname, 0, 0, 1, 2)
         self.fLayout.addWidget(self.text, 1, 0, 2, 2)
 

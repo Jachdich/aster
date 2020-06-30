@@ -96,6 +96,6 @@ QPlainTextEdit {{
 }}
 
 QLabel {{
-    padding: -10px;
+    
 }}
 
