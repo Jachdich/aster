@@ -1,8 +1,17 @@
 
 import stylesheets
 from PyQt5 import QtCore, QtWidgets, QtGui
-import sys
+import sys, random
 
+def genRandomText():
+    return "theres this optional work i can do and its been set by the college i wanna go to but should i waste my time doing it? its about science and i dont rlly like science"
+    with open("logger.py", "r") as f:
+        x = f.read().split("\n")
+
+    num = random.randint(1, 5)
+    pos = random.randint(0, len(x) - num - 1)
+    lines = x[pos:pos + num]
+    return "\n".join(lines)
 
 class User:
     def __init__(self):
@@ -25,9 +34,9 @@ class Message(QtWidgets.QWidget):
         self.pfp.setFixedHeight(48)
         self.pfp.setPixmap(self.user.picture)
 
-        self.uname = QtWidgets.QLabel("KingJellyfish")
+        self.uname = QtWidgets.QLabel(random.choice(["KingJellyfish", "MasterMysterie"]))
 
-        self.text = QtWidgets.QLabel("This is a test m9\nSecond line\nThird line m10 this is cool")
+        self.text = QtWidgets.QLabel(genRandomText())
         
         self.layout.addWidget(self.pfp, 0, 0, 1, 1)#, alignment=QtCore.Qt.AlignLeft)
         self.layout.addWidget(self.frame, 0, 1, 2, 1)

@@ -95,9 +95,6 @@ QPlainTextEdit {{
 /*    font-size: 18px;*/
 }}
 
-QLabel {{
-    
-}}
 
 QPushButton {{
     background-color: {bg};
@@ -108,3 +105,9 @@ QScrollArea {{
     background-color: {bg};
     color: {fg};
 }}
+
+QLabel {{
+    font-size: 16px;
+/*    padding: 2px; TODO make this work*/
+}}
+
