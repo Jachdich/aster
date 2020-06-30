@@ -14,22 +14,25 @@ class Message(QtWidgets.QWidget):
         super().__init__(parent)
         self.layout = QtWidgets.QGridLayout()
 
+        self.layout.setSpacing(0);
+
         self.user = User()
         self.frame = QtWidgets.QFrame()
         self.fLayout = QtWidgets.QGridLayout()
 
         self.pfp = QtWidgets.QLabel(self)
         self.pfp.setFixedWidth(48)
+        self.pfp.setFixedHeight(48)
         self.pfp.setPixmap(self.user.picture)
 
         self.uname = QtWidgets.QLabel("KingJellyfish")
 
         self.text = QtWidgets.QLabel("This is a test m9\nSecond line\nThird line m10 this is cool")
         
-        self.layout.addWidget(self.pfp, 0, 0, 2, 1)#, alignment=QtCore.Qt.AlignLeft)
-        self.layout.addWidget(self.frame, 0, 1, 2, 1)
+        self.layout.addWidget(self.pfp, 0, 0, 1, 1)#, alignment=QtCore.Qt.AlignLeft)
+        self.layout.addWidget(self.frame, 0, 1, 2, 2)
         self.fLayout.addWidget(self.uname, 0, 0, 1, 2)
-        self.fLayout.addWidget(self.text, 1, 0, 1, 2)
+        self.fLayout.addWidget(self.text, 1, 0, 2, 2)
 
         self.frame.setLayout(self.fLayout)
         self.setLayout(self.layout)
@@ -58,6 +61,7 @@ class App(QtWidgets.QWidget):
         self.textbox.setGeometry(QtCore.QRect(xpos, ypos, width, height))
 
         self.setStyleSheet(self.ssManager.StyleSheet)
+
         
         self.show()
 
