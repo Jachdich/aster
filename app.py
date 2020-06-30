@@ -10,7 +10,7 @@ class User:
         self.name = "Test User"
 
 class Message(QtWidgets.QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.layout = QtWidgets.QGridLayout()
 
@@ -36,34 +36,48 @@ class Message(QtWidgets.QWidget):
 
         self.frame.setLayout(self.fLayout)
         self.setLayout(self.layout)
-        self.layout.setRowStretch(1, 1)
+        self.layout.setRowStretch(2, 1)
+        self.layout.setColumnStretch(2, 1)
         
     def sizeHint(self):
         return self.layout.sizeHint()
         
-class MessageView(QtWidgets.QWidget):
+class MessageView(QtWidgets.QScrollArea):
     def __init__(self):
         super().__init__()
         self.layout = QtWidgets.QVBoxLayout()
-        
+        self.mainWidget = QtWidgets.QWidget()
+        self.mainWidget.setLayout(self.layout)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setWidgetResizable(True)
+        self.setWidget(self.mainWidget)
+        self.messages = []
+
+    def addMessage(self, message):
+        self.messages.append(message)
+        self.layout.addWidget(message)
 
 class App(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.ssManager = stylesheets.StyleSheetManager()
         self.ssManager.loadSheets()
-        
-        self.textbox = Message(self)
+        self.layout = QtWidgets.QHBoxLayout()
 
-        height = self.textbox.sizeHint().height()
-        width = self.textbox.sizeHint().width()
-        xpos, ypos = 5, 5
-        self.textbox.setGeometry(QtCore.QRect(xpos, ypos, width, height))
+        self.messageview = MessageView()
+        self.layout.addWidget(self.messageview)
+        self.btn = QtWidgets.QPushButton("addmsg")
+        self.btn.clicked.connect(self.addNewMessage)
+        self.layout.addWidget(self.btn)
 
         self.setStyleSheet(self.ssManager.StyleSheet)
 
-        
+        self.setLayout(self.layout)        
         self.show()
+
+    def addNewMessage(self):
+        self.messageview.addMessage(Message())
 
 QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
 app = QtWidgets.QApplication(sys.argv)

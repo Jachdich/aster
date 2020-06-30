@@ -1,4 +1,4 @@
-App {{
+QWidget {{
     background-color: {bg};
     color: {fg};
 }}
@@ -99,3 +99,12 @@ QLabel {{
     
 }}
 
+QPushButton {{
+    background-color: {bg};
+    color: {fg};
+}}
+
+QScrollArea {{
+    background-color: {bg};
+    color: {fg};
+}}
