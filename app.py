@@ -24,6 +24,7 @@ class Message(QtWidgets.QWidget):
         self.layout = QtWidgets.QGridLayout()
 
         self.layout.setSpacing(0);
+        
 
         self.user = User()
         self.frame = QtWidgets.QFrame()
@@ -37,11 +38,12 @@ class Message(QtWidgets.QWidget):
         self.uname = QtWidgets.QLabel(random.choice(["KingJellyfish", "MasterMysterie"]))
 
         self.text = QtWidgets.QLabel(genRandomText())
+        self.text.setWordWrap(True)
         
         self.layout.addWidget(self.pfp, 0, 0, 1, 1)#, alignment=QtCore.Qt.AlignLeft)
         self.layout.addWidget(self.frame, 0, 1, 2, 1)
-        self.fLayout.addWidget(self.uname, 0, 0, 1, 2)
-        self.fLayout.addWidget(self.text, 1, 0, 2, 2)
+        self.fLayout.addWidget(self.uname, 0, 0, 1, 1)
+        self.fLayout.addWidget(self.text, 1, 0, 2, 1)
 
         self.frame.setLayout(self.fLayout)
         self.setLayout(self.layout)
@@ -55,6 +57,7 @@ class MessageView(QtWidgets.QScrollArea):
     def __init__(self):
         super().__init__()
         self.layout = QtWidgets.QVBoxLayout()
+        
         self.mainWidget = QtWidgets.QWidget()
         self.mainWidget.setLayout(self.layout)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
@@ -82,7 +85,8 @@ class App(QtWidgets.QWidget):
 
         self.setStyleSheet(self.ssManager.StyleSheet)
 
-        self.setLayout(self.layout)        
+        self.setLayout(self.layout)
+        self.setMinimumSize(self.sizeHint())
         self.show()
 
     def addNewMessage(self):
